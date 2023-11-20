@@ -1,0 +1,178 @@
+﻿@*@model PartyProduct.Models.Invoice*@
+@model PartyProduct.ViewModels.BindInvoice
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2 id="Create">Create </h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Invoice</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.singleInvoice.Party, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.singleInvoice.Party.PartyName, new SelectList(ViewBag.list, "id", "PartyName"), "Select Party", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.singleInvoice.Party.PartyName, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.singleInvoice.Product, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.singleInvoice.Product.ProductName, new SelectList(" "), "Select Product", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.singleInvoice.Product.ProductName, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.singleInvoice.Rate_Of_Product, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.singleInvoice.Rate_Of_Product, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.singleInvoice.Rate_Of_Product, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.singleInvoice.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.singleInvoice.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.singleInvoice.Quantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+<br />
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.singleInvoice.Party)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.singleInvoice.Product)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.singleInvoice.Rate_Of_Product)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.singleInvoice.Quantity)
+        </th>
+        <th>
+            Total
+        </th>
+
+        <th></th>
+    </tr>
+
+
+    @{decimal total = 0; }
+    @foreach (var item in Model.invoices)
+    {
+        total += item.Rate_Of_Product * item.Quantity;
+        var total1 = item.Rate_Of_Product * item.Quantity;
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Party.PartyName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rate_Of_Product)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @total1
+            </td>
+            <td>
+                @*@Html.ActionLink("Delete", "Delete", new { id = item.id }, new { @class = "btn btn-danger" })*@
+            </td>
+        </tr>
+    }
+
+    <tr>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>
+            <span>@total</span>
+        </td>
+        <td>
+            @Html.ActionLink("Clear", "DeleteAll", "Invoices", new { id = "deleteAll" }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+</table>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#singleInvoice_Party_PartyName').change(function () {
+                //var a = $('#Party_PartyName Option:Selected').text();
+                //$('#Create').text(a);
+                var b = $('#singleInvoice_Party_PartyName').val();
+
+                //alert("Party Nmae = " + b)
+
+                $.get("/Invoices/GetProducts", { id: b }, function (data) {
+
+                    //$('#Product_ProductName')
+                    console.log(data)
+                    $('#singleInvoice_Product_ProductName').empty();
+                    $('#singleInvoice_Product_ProductName').append("<option value='" + 0 + "'>" + "Select Product" + "</option>")
+                    for (let i = 0; i < data.length; i++) {
+                        $('#singleInvoice_Product_ProductName').append("<option value='" + data[i].id + "'>" + data[i].ProductName + "</option>")
+                    }
+
+                });
+
+            });
+
+            $('#singleInvoice_Product_ProductName').change(function () {
+
+                var prId = $('#singleInvoice_Product_ProductName').val();
+                //alert("Party Nmae = " + prId)
+
+                $.get("/Invoices/GetRate", { id: prId }, function (data) {
+                    console.log(data[data.length - 1].Rate)
+                    $('#singleInvoice_Rate_Of_Product').val(data[data.length - 1].Rate)
+
+                });
+
+            })
+
+
+
+        })
+
+    </script>
+
+
+}
