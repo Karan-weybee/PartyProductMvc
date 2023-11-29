@@ -49,33 +49,32 @@ namespace PartyProduct.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(BindInvoice invoice)
         {
-            if (ModelState.IsValid)
+
+            try
             {
-                try
+                var partytId = Convert.ToInt32(invoice.singleInvoice.Party.id);
+                var productId = Convert.ToInt32(invoice.singleInvoice.Product.id);
+                var party = db.Parties.Single(x => x.id == partytId);
+                var product = db.Products.Single(x => x.id == productId);
+
+
+
+                Invoice Data = new Invoice()
                 {
-                    var pId = Convert.ToInt32(invoice.singleInvoice.Party.PartyName);
-                    var prId = Convert.ToInt32(invoice.singleInvoice.Product.ProductName);
-                    var party = db.Parties.Single(x => x.id == pId);
-                    var product = db.Products.Single(x => x.id == prId);
-
-
-
-                    Invoice Data = new Invoice()
-                    {
-                        Rate_Of_Product = invoice.singleInvoice.Rate_Of_Product,
-                        Quantity = invoice.singleInvoice.Quantity,
-                        Party = party,
-                        Product = product
-                    };
-                    db.Invoices.Add(Data);
-                    db.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    return RedirectToAction("Create");
-                }
+                    Rate_Of_Product = invoice.singleInvoice.Rate_Of_Product,
+                    Quantity = invoice.singleInvoice.Quantity,
+                    Party = party,
+                    Product = product
+                };
+                db.Invoices.Add(Data);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
                 return RedirectToAction("Create");
             }
+            return RedirectToAction("Create");
+
 
             return View(invoice);
         }

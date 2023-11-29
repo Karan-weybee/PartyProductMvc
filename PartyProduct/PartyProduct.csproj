@@ -281,12 +281,10 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Parties\Create.cshtml" />
-    <Content Include="Views\Parties\Delete.cshtml" />
     <Content Include="Views\Parties\Details.cshtml" />
     <Content Include="Views\Parties\Edit.cshtml" />
     <Content Include="Views\Parties\Index.cshtml" />
     <Content Include="Views\Products\Create.cshtml" />
-    <Content Include="Views\Products\Delete.cshtml" />
     <Content Include="Views\Products\Details.cshtml" />
     <Content Include="Views\Products\Edit.cshtml" />
     <Content Include="Views\Products\Index.cshtml" />

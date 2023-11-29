@@ -21,7 +21,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.singleInvoice.Party, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(m => m.singleInvoice.Party.PartyName, new SelectList(ViewBag.list, "id", "PartyName"), "Select Party", new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.singleInvoice.Party.id, new SelectList(ViewBag.list, "id", "PartyName"), "Select Party", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.singleInvoice.Party.PartyName, "", new { @class = "text-danger" })
 
             </div>
@@ -29,7 +29,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.singleInvoice.Product, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(m => m.singleInvoice.Product.ProductName, new SelectList(" "), "Select Product", new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.singleInvoice.Product.id, new SelectList(" "), "Select Product", new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.singleInvoice.Product.ProductName, "", new { @class = "text-danger" })
 
             </div>
@@ -86,6 +86,10 @@
     @{decimal total = 0; }
     @foreach (var item in Model.invoices)
     {
+
+
+
+
         total += item.Rate_Of_Product * item.Quantity;
         var total1 = item.Rate_Of_Product * item.Quantity;
 
@@ -134,10 +138,10 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
         $(document).ready(function () {
-            $('#singleInvoice_Party_PartyName').change(function () {
+            $('#singleInvoice_Party_id').change(function () {
                 //var a = $('#Party_PartyName Option:Selected').text();
                 //$('#Create').text(a);
-                var b = $('#singleInvoice_Party_PartyName').val();
+                var b = $('#singleInvoice_Party_id').val();
 
                 //alert("Party Nmae = " + b)
 
@@ -145,19 +149,19 @@
 
                     //$('#Product_ProductName')
                     console.log(data)
-                    $('#singleInvoice_Product_ProductName').empty();
-                    $('#singleInvoice_Product_ProductName').append("<option value='" + 0 + "'>" + "Select Product" + "</option>")
+                    $('#singleInvoice_Product_id').empty();
+                    $('#singleInvoice_Product_id').append("<option value='" + 0 + "'>" + "Select Product" + "</option>")
                     for (let i = 0; i < data.length; i++) {
-                        $('#singleInvoice_Product_ProductName').append("<option value='" + data[i].id + "'>" + data[i].ProductName + "</option>")
+                        $('#singleInvoice_Product_id').append("<option value='" + data[i].id + "'>" + data[i].ProductName + "</option>")
                     }
 
                 });
 
             });
 
-            $('#singleInvoice_Product_ProductName').change(function () {
+            $('#singleInvoice_Product_id').change(function () {
 
-                var prId = $('#singleInvoice_Product_ProductName').val();
+                var prId = $('#singleInvoice_Product_id').val();
                 //alert("Party Nmae = " + prId)
 
                 $.get("/Invoices/GetRate", { id: prId }, function (data) {

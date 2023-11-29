@@ -51,20 +51,19 @@ namespace PartyProduct.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,Rate,Date_Of_Rate,Product")] ProductRate productRate)
+        public ActionResult Create([Bind(Include = "Rate,Date_Of_Rate,Product")] ProductRate productRate)
         {
-            if (ModelState.IsValid)
-            {
 
-                var prId = Convert.ToInt32(productRate.Product.ProductName);
-                var product = db.Products.Single(x => x.id == prId);
 
-                productRate.Product = product;
+            var productId = Convert.ToInt32(productRate.Product.id);
+            var product = db.Products.Single(x => x.id == productId);
 
-                db.ProductRates.Add(productRate);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            productRate.Product = product;
+
+            db.ProductRates.Add(productRate);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+
 
             return View(productRate);
         }
@@ -93,20 +92,19 @@ namespace PartyProduct.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,Rate,Date_Of_Rate,Product")] ProductRate productRate)
         {
-            if (ModelState.IsValid)
-            {
-                var prId = Convert.ToInt32(productRate.Product.ProductName);
-                var product = db.Products.Single(x => x.id == prId);
+
+            var productId = Convert.ToInt32(productRate.Product.id);
+            var product = db.Products.Single(x => x.id == productId);
 
 
-                var updateProductRate = db.ProductRates.Single(x => x.id == productRate.id);
-                updateProductRate.Product = product;
-                updateProductRate.Rate = productRate.Rate;
-                updateProductRate.Date_Of_Rate = productRate.Date_Of_Rate;
+            var updateProductRate = db.ProductRates.Single(x => x.id == productRate.id);
+            updateProductRate.Product = product;
+            updateProductRate.Rate = productRate.Rate;
+            updateProductRate.Date_Of_Rate = productRate.Date_Of_Rate;
 
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+
             return View(productRate);
         }
 

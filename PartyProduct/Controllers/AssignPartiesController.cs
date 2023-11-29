@@ -40,26 +40,25 @@ namespace PartyProduct.Controllers
         //public ActionResult Create(AssignParty assignParty)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,Party,Product")] AssignParty assignParty)
+        public ActionResult Create(AssignParty assignParty)
         {
-            if (ModelState.IsValid)
+
+            var partyId = Convert.ToInt32(assignParty.Party.id);
+            var productId = Convert.ToInt32(assignParty.Product.id);
+            var party = db.Parties.Single(x => x.id == partyId);
+            var product = db.Products.Single(x => x.id == productId);
+            AssignParty Assign = new AssignParty()
             {
-                var pId = Convert.ToInt32(assignParty.Party.PartyName);
-                var prId = Convert.ToInt32(assignParty.Product.ProductName);
-                var party = db.Parties.Single(x => x.id == pId);
-                var product = db.Products.Single(x => x.id == prId);
-                AssignParty Assign = new AssignParty()
-                {
 
 
-                    Party = party,
-                    Product = product
-                };
-                db.AssignParties.Add(Assign);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                Party = party,
+                Product = product
+            };
+            db.AssignParties.Add(Assign);
+            db.SaveChanges();
+            return RedirectToAction("Index");
 
-            }
+
 
             return View(assignParty);
         }
@@ -90,22 +89,21 @@ namespace PartyProduct.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,Party,Product")] AssignParty assignParty)
         {
-            if (ModelState.IsValid)
-            {
-                var pId = Convert.ToInt32(assignParty.Party.PartyName);
-                var prId = Convert.ToInt32(assignParty.Product.ProductName);
-                var party = db.Parties.Single(x => x.id == pId);
-                var product = db.Products.Single(x => x.id == prId);
+
+            var partyId = Convert.ToInt32(assignParty.Party.id);
+            var productId = Convert.ToInt32(assignParty.Product.id);
+            var party = db.Parties.Single(x => x.id == partyId);
+            var product = db.Products.Single(x => x.id == productId);
 
 
-                var updateAssign = db.AssignParties.Single(x => x.id == assignParty.id);
-                updateAssign.Party = party;
-                updateAssign.Product = product;
+            var updateAssign = db.AssignParties.Single(x => x.id == assignParty.id);
+            updateAssign.Party = party;
+            updateAssign.Product = product;
 
-                db.SaveChanges();
-                return RedirectToAction("Index");
+            db.SaveChanges();
+            return RedirectToAction("Index");
 
-            }
+
             return View(assignParty);
         }
 

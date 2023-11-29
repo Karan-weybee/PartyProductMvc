@@ -54,7 +54,7 @@ namespace PartyProduct.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,PartyName")] Party party)
+        public ActionResult Create([Bind(Include = "PartyName")] Party party)
         {
             if (ModelState.IsValid)
             {
@@ -100,28 +100,12 @@ namespace PartyProduct.Controllers
         // GET: Parties/Delete/5
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Party party = db.Parties.Find(id);
-            if (party == null)
-            {
-                return HttpNotFound();
-            }
-            return View(party);
-        }
-
-        // POST: Parties/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
             Party party = db.Parties.Find(id);
             db.Parties.Remove(party);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
 
         protected override void Dispose(bool disposing)
         {
